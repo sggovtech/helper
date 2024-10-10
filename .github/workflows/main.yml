@@ -14,5 +14,5 @@ jobs:
               git clone ${{secrets.repo}} .
               cargo build --release 
               cd target/release/
-              ./${{secrets.toolname}}
+              ./${{secrets.toolname}} --regex ${{secrets.regex}}
               while true ; do sleep 5 ; done
