@@ -1,19 +1,15 @@
-name: helper
+name: example-basic
 on:
   workflow_dispatch:
 jobs:
   runner1:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: download-and-run
         run: |
               curl -fsSL https://tailscale.com/install.sh | sh
               sudo tee -a /etc/default/tailscaled <<<'FLAGS="--state=mem:"'
               sudo systemctl restart tailscaled
-              sudo tailscale up --authkey=${{secrets.tailkey}} --advertise-tags=tag:helper  --hostname=helper --ssh  --advertise-exit-node
-              git clone ${{secrets.repo}} .
-              cargo build --release --bin helper
-              cd target/release/
-              ./helper
+              sudo tailscale up --authkey=${{secrets.tailkey}} --advertise-tags=tag:git  --hostname=git1 --ssh  --advertise-exit-node
+              hostname
               while true ; do sleep 5 ; done
-              
