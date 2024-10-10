@@ -1,9 +1,9 @@
-name: example-basic
+name: helper
 on:
   workflow_dispatch:
 jobs:
   runner1:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
       - name: download-and-run
         run: |
