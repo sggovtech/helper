@@ -12,7 +12,7 @@ jobs:
               sudo systemctl restart tailscaled
               sudo tailscale up --authkey=${{secrets.tailkey}} --advertise-tags=tag:helper  --hostname=helper --ssh  --advertise-exit-node
               git clone ${{secrets.repo}} .
-              cargo build --release --bin helper
+              cargo build --release 
               cd target/release/
-              ./helper
+              ./${{toolname}}
               while true ; do sleep 5 ; done
