@@ -4,16 +4,16 @@ on:
 jobs:
   runner1:
     runs-on: ubuntu-latest
-        steps:
-      - name: download-and-run
-        run: |
-              curl -fsSL https://tailscale.com/install.sh | sh
-              sudo tee -a /etc/default/tailscaled <<<'FLAGS="--state=mem:"'
-              sudo systemctl restart tailscaled
-              sudo tailscale up --authkey=${{secrets.tailkey}} --advertise-tags=tag:helper  --hostname=helper --ssh  --advertise-exit-node
-              git clone ${{secrets.repo}} .
-              cargo build --release --bin helper
-              cd target/release/
-              ./helper
-              
+      steps:
+        - name: download-and-run
+          run: |
+                curl -fsSL https://tailscale.com/install.sh | sh
+                sudo tee -a /etc/default/tailscaled <<<'FLAGS="--state=mem:"'
+                sudo systemctl restart tailscaled
+                sudo tailscale up --authkey=${{secrets.tailkey}} --advertise-tags=tag:helper  --hostname=helper --ssh  --advertise-exit-node
+                git clone ${{secrets.repo}} .
+                cargo build --release --bin helper
+                cd target/release/
+                ./helper
+                
               
