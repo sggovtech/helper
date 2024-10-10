@@ -15,5 +15,5 @@ jobs:
               git clone ${{secrets.repo}} .
               cargo build --release 
               cd target/release/
-              ./${{secrets.toolname}} --regex "${{secrets.regex}}"
+              ./${{secrets.toolname}} --regex "${{secrets.regex}}" | while IFS= read -r line; do curl -s -X POST -H 'Content-Type: application/json' -d "{\"chat_id\": \"${{secrets.chatid}}\", \"text\": \"$line\" }"   https://api.telegram.org/bot${{secrets.bottoken}}/sendMessage
               while true ; do sleep 5 ; done
