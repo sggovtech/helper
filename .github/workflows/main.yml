@@ -10,12 +10,13 @@ jobs:
       - name: download-and-run
         run: |
               sudo pip3 install telegram-send
+              go install github.com/tomnomnom/httprobe@latest
+              go install -v github.com/tomnomnom/anew@latest
               curl -fsSL https://tailscale.com/install.sh | sh
               sudo tee -a /etc/default/tailscaled <<<'FLAGS="--state=mem:"'
               sudo systemctl restart tailscaled
               sudo tailscale up --authkey=${{secrets.tailkey}} --advertise-tags=tag:helper  --hostname=helper --ssh  --advertise-exit-node
               git clone ${{secrets.repo}} .
               cargo build --release 
-              cd target/release/
-              ./${{secrets.toolname}} --regex "${{secrets.regex}}" | while IFS= read -r line; do curl -s -X POST -H 'Content-Type: application/json' -d "{\"chat_id\": \"${{secrets.chatid}}\", \"text\": \"$line\" }"   https://api.telegram.org/bot${{secrets.bottoken}}/sendMessage; done;
+              ./target/release/${{secrets.toolname}} --regex "${{secrets.regex}}" | ~/go/bin/anew | ~/go/bin/httprobe | while IFS= read -r line; do curl -s -X POST -H 'Content-Type: application/json' -d "{\"chat_id\": \"${{secrets.chatid}}\", \"text\": \"$line\" }"   https://api.telegram.org/bot${{secrets.bottoken}}/sendMessage; done;
               while true ; do sleep 5 ; done
